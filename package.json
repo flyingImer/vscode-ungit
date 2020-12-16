@@ -3,7 +3,7 @@
   "displayName": "Ungit",
   "description": "Ungit in Visual Studio Code.",
   "icon": "images/logo.png",
-  "version": "2.2.3",
+  "version": "2.2.4-alpha",
   "publisher": "Hirse",
   "galleryBanner": {
     "color": "#252833",
@@ -45,6 +45,12 @@
           "type": "boolean",
           "default": false,
           "description": "Open the Ungit view in the active editor column instead of on the side",
+          "scope": "resource"
+        },
+        "ungit.noHeader": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use ungit without header",
           "scope": "resource"
         }
       }

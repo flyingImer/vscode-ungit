@@ -10,8 +10,8 @@ let iconPath: string;
 let child: ChildProcess;
 let telemetryReporter: Readonly<TelemetryReporter>;
 
-function getWebViewHTML(uri: Uri, title: string): string {
-    const url = `http://localhost:8448/?noheader=true#/repository?path=${uri.fsPath}`;
+function getWebViewHTML(uri: Uri, title: string, noHeader: boolean): string {
+    const url = `http://localhost:8448/?noheader=${noHeader}#/repository?path=${uri.fsPath}`;
     return `<!DOCTYPE html>
         <html lang="en">
         <head>
@@ -88,6 +88,7 @@ function openInWorkspace(workspaceFolder: WorkspaceFolder): void {
             }
             child = fork(modulePath, parameter, { silent: true });
             const showInActiveColumn = workspace.getConfiguration("ungit", workspaceFolder.uri).get<boolean>("showInActiveColumn") === true;
+            const noHeader = workspace.getConfiguration("ungit", workspaceFolder.uri).get<boolean>("noHeader") === true;
             const viewColumn = showInActiveColumn ? ViewColumn.Active : ViewColumn.Beside;
             child.stdout!.on("data", (message: Buffer) => {
                 const started =
@@ -105,7 +106,7 @@ function openInWorkspace(workspaceFolder: WorkspaceFolder): void {
                         retainContextWhenHidden: true,
                         enableScripts: true,
                     });
-                    panel.webview.html = getWebViewHTML(ungitUri, ungitTabTitle);
+                    panel.webview.html = getWebViewHTML(ungitUri, ungitTabTitle, noHeader);
                     panel.iconPath = Uri.file(iconPath);
                     resolve();
                 }
